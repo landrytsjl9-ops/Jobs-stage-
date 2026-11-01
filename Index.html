@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOB&STAGE - Cameroun</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-main: #ebe0d0;
+      --card-bg: #fffbf5;
+      --primary-blue: #1d456c;
+      --green-tag-bg: #d1f2dd;
+      --green-tag-text: #1e8346;
+      --dark-banner: #4a3728;
+      --border-color: #e5d9c5;
+      --text-muted: #5c6b73;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--primary-blue);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--bg-main);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: 1px solid #d8caaf;
+    }
+    .header { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary-blue); cursor: pointer; }
+    .country-tag { background-color: var(--green-tag-bg); color: var(--green-tag-text); padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    
+    /* Navigation */
+    .nav-menu { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .nav-link {
+      color: var(--primary-blue); background: rgba(29,69,108,0.05); border: 1px solid transparent;
+      padding: 6px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .nav-link:hover, .nav-link.active { background-color: var(--primary-blue); color: #ffffff; }
+
+    /* Profil style jeu en ligne */
+    .profile-header {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--card-bg); padding: 12px 16px; border-radius: 16px;
+      border: 1px solid var(--border-color); margin-bottom: 20px;
+    }
+    .profile-left { display: flex; align-items: center; gap: 10px; }
+    .profile-avatar {
+      width: 38px; height: 38px; border-radius: 50%; background: var(--primary-blue); color: white;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold; border: 2px solid #d1f2dd;
+    }
+    .profile-info h3 { font-size: 0.9rem; font-weight: bold; color: var(--primary-blue); }
+    .profile-info p { font-size: 0.7rem; color: #5c6b73; }
+
+    /* Vues */
+    .view-page { display: none; }
+    .view-page.active-view { display: block; }
+
+    .hero-card {
+      background-color: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); margin-bottom: 20px;
+    }
+    .hero-title { font-size: 1.4rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 8px; }
+    .hero-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+    .search-form { display: flex; flex-direction: column; gap: 10px; }
+    .input-field {
+      width: 100%; padding: 12px 14px; border-radius: 12px; background-color: #ffffff;
+      color: var(--primary-blue); font-size: 0.85rem; border: 1px solid #e2d5c1; outline: none;
+    }
+    .btn-primary {
+      width: 100%; padding: 12px 16px; background-color: var(--primary-blue); color: #ffffff;
+      font-weight: 700; font-size: 0.875rem; border-radius: 12px; border: none; cursor: pointer;
+    }
+
+    /* Boutons de basculement Stages / Emplois */
+    .menu-tabs { display: flex; gap: 10px; margin-bottom: 16px; }
+    .tab-btn {
+      flex: 1; padding: 10px; text-align: center; background: #fff;
+      border: 1px solid var(--border-color); border-radius: 12px;
+      font-weight: bold; font-size: 0.85rem; color: var(--primary-blue); cursor: pointer;
+    }
+    .tab-btn.active { background: var(--primary-blue); color: #fff; }
+
+    /* Cartes carrées */
+    .grid-container { display: flex; flex-direction: column; gap: 12px; }
+    .square-card {
+      background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .badge { font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; background: #f0e4d2; color: var(--primary-blue); border-radius: 6px; }
+    .card-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .btn-view { flex: 1; padding: 8px; background: #e2d5c1; color: var(--primary-blue); font-size: 0.75rem; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; text-align: center; }
+    .btn-apply { flex: 1; padding: 8px; background: var(--primary-blue); color: #fff; font-size: 0.75rem; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; text-align: center; }
+
+    .footer-banner { background-color: var(--dark-banner); border-radius: 12px; padding: 10px 14px; text-align: center; margin-top: 20px; }
+    .footer-text { font-size: 0.75rem; color: rgba(255,255,255,0.9); }
+  </style>
+</head>
+<body>
+
+  <main class="app-container">
+    
+    <!-- EN-TÊTE PRINCIPAL -->
+    <header class="header">
+      <div class="header-top">
+        <h1 class="logo" onclick="switchTab('accueil')">JOB&STAGE</h1>
+        <!-- Devient le profil utilisateur après enregistrement du CV -->
+        <div id="headerTopRight">
+          <span class="country-tag">CAMEROUN</span>
+        </div>
+      </div>
+
+      <!-- MENU DES ONGLETS -->
+      <nav class="nav-menu" id="mainNavbar">
+        <button class="nav-link active" id="btn-accueil" onclick="switchTab('accueil')">Accueil</button>
+        <button class="nav-link" id="btn-emplois" onclick="switchTab('emplois')">Emplois</button>
+        <button class="nav-link" id="btn-stages" onclick="switchTab('stages')">Stages</button>
+        <button class="nav-link" id="btn-entreprises" onclick="switchTab('entreprises')">Entreprises</button>
+        <button class="nav-link" id="btn-cv" onclick="switchTab('cv')">📝 Créer CV</button>
+      </nav>
+    </header>
+
+    <!-- ================= VUE 1 : ACCUEIL ================= -->
+    <div id="view-accueil" class="view-page active-view">
+      <section class="hero-card">
+        <h2 class="hero-title">Construis ton avenir professionnel.</h2>
+        <p class="hero-subtitle">Trouve un emploi ou un stage qui correspond à tes ambitions.</p>
+
+        <form id="searchForm" class="search-form">
+          <input type="text" id="jobInput" placeholder="Quel emploi ou stage recherchez-vous ?" class="input-field">
+          <input type="text" id="cityInput" placeholder="Ville : Douala, Yaoundé, Bafoussam..." class="input-field">
+          <button type="submit" class="btn-primary">Rechercher des opportunités</button>
+        </form>
+      </section>
+
+      <section>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 12px;">Nos opportunités</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div class="hero-card" style="margin:0; cursor:pointer;" onclick="switchTab('emplois')">
+            <h4 style="font-weight: 800; font-size: 1rem; margin-bottom: 4px;">Emplois</h4>
+            <p style="font-size: 0.70rem; color: #6b7280;">Marketing, Community...</p>
+          </div>
+          <div class="hero-card" style="margin:0; cursor:pointer;" onclick="switchTab('stages')">
+            <h4 style="font-weight: 800; font-size: 1rem; margin-bottom: 4px;">Stages</h4>
+            <p style="font-size: 0.70rem; color: #6b7280;">Académiques, pros...</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= VUE 2 & 3 : ESPACE PROFIL (STAGES & EMPLOIS EN CARRÉS) ================= -->
+    <div id="view-profil-offres" class="view-page">
+      <!-- Onglets internes Stages / Emplois -->
+      <div class="menu-tabs">
+        <button class="tab-btn active" id="btnStageTab" onclick="switchOfferCategory('stages')">🎓 Stages</button>
+        <button class="tab-btn" id="btnEmploiTab" onclick="switchOfferCategory('emplois')">💼 Emplois</button>
+      </div>
+
+      <!-- Conteneur des cartes carrées -->
+      <div id="offersContainer" class="grid-container"></div>
+    </div>
+
+    <!-- ================= VUE 4 : ENTREPRISES ================= -->
+    <div id="view-entreprises" class="view-page">
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 12px;">🏢 Grandes Entreprises du Cameroun</h3>
+      <div id="list-entreprises"></div>
+    </div>
+
+    <!-- ================= VUE 5 : FORMULAIRE CRÉER CV ================= -->
+    <div id="view-cv" class="view-page">
+      <div class="hero-card">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 4px;">📄 Formulaire de création de CV</h3>
+        <p class="hero-subtitle">Renseignez vos informations pour configurer votre profil.</p>
+
+        <form id="cvForm" onsubmit="saveCvAndSwitchToProfile(event)" class="search-form">
+          <label style="font-size: 0.75rem; font-weight: bold;">Nom et Prénom :</label>
+          <input type="text" id="cvName" placeholder="Ex: Jean Paul" class="input-field" required>
+
+          <label style="font-size: 0.75rem; font-weight: bold;">Ville actuelle :</label>
+          <input type="text" id="cvCity" placeholder="Ex: Douala, Yaoundé..." class="input-field" required>
+
+          <label style="font-size: 0.75rem; font-weight: bold;">Domaine visé :</label>
+          <input type="text" id="cvDomain" placeholder="Ex: Marketing Digital..." class="input-field" required>
+
+          <button type="submit" class="btn-primary" style="margin-top: 10px;">Enregistrer et ouvrir mon espace</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- BANDEAU FOOTER -->
+    <footer class="footer-banner">
+      <p class="footer-text">Aperçu conceptuel du design JOB&STAGE</p>
+    </footer>
+
+  </main>
+
+  <script>
+    const stagesData = [
+      { title: "Stage Académique - Brasseries du Cameroun", type: "Académique", city: "Douala", desc: "Stage de fin d'études en logistique et production." },
+      { title: "Stage Professionnel - UCBC", type: "Professionnel", city: "Bafoussam", desc: "Assistanat technique et gestion informatique." },
+      { title: "Stage Community Management - MTN", type: "Pré-emploi", city: "Yaoundé", desc: "Animation des réseaux sociaux et graphisme." }
+    ];
+
+    const emploisData = [
+      { title: "Développeur Fullstack - Orange", type: "CDI", city: "Douala", desc: "Création d'applications web et mobile." },
+      { title: "Community Manager Senior - Kiro'o", type: "CDI", city: "Yaoundé", desc: "Gestion des communautés et campagnes publicitaires." },
+      { title: "Commercial Digital - Tradex", type: "CDD", city: "Douala", desc: "Prospection et suivi client en ligne." }
+    ];
+
+    const entreprisesCam = [
+      { name: "MTN Cameroun", sector: "Télécommunications", city: "Douala & Yaoundé" },
+      { name: "Orange Cameroun", sector: "Tech & Mobile", city: "National" },
+      { name: "Afriland First Bank", sector: "Banque & Finance", city: "Douala" }
+    ];
+
+    // Navigation de base entre les onglets initiaux
+    function switchTab(tabName) {
+      document.querySelectorAll('.view-page').forEach(view => view.classList.remove('active-view'));
+      document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+
+      if (tabName === 'emplois' || tabName === 'stages') {
+        // Redirige vers la vue unifiée profil (stages/emplois)
+        document.getElementById('view-profil-offres').classList.add('active-view');
+        switchOfferCategory(tabName);
+      } else {
+        const targetView = document.getElementById('view-' + tabName);
+        if (targetView) targetView.classList.add('active-view');
+        
+        const targetBtn = document.getElementById('btn-' + tabName);
+        if (targetBtn) targetBtn.classList.add('active');
+      }
+
+      if (tabName === 'entreprises') renderEntreprises();
+    }
+
+    function renderEntreprises() {
+      const container = document.getElementById('list-entreprises');
+      container.innerHTML = entreprisesCam.map(item => `
+        <div class="square-card" style="margin-bottom: 10px;">
+          <h4 style="font-size: 0.95rem; font-weight: bold; color: var(--primary-blue);">${item.name}</h4>
+          <p style="font-size: 0.75rem; color: #5c6b73;">${item.sector}</p>
+          <span style="font-size: 0.7rem; color: #1e8346; font-weight: 600;">📍 ${item.city}</span>
+          <button class="btn-primary" style="padding: 6px; font-size: 0.75rem; margin-top: 4px;" onclick="alert('Offres de ${item.name}')">Voir offres</button>
+        </div>
+      `).join('');
+    }
+
+    // Gestion du basculement interne de la page profil (Stages / Emplois)
+    function switchOfferCategory(category) {
+      const btnStage = document.getElementById('btnStageTab');
+      const btnEmploi = document.getElementById('btnEmploiTab');
+      const container = document.getElementById('offersContainer');
+
+      container.innerHTML = '';
+
+      if (category === 'stages') {
+        if(btnStage) btnStage.classList.add('active');
+        if(btnEmploi) btnEmploi.classList.remove('active');
+        stagesData.forEach(item => { container.innerHTML += createSquareCard(item); });
+      } else {
+        if(btnEmploi) btnEmploi.classList.add('active');
+        if(btnStage) btnStage.classList.remove('active');
+        emploisData.forEach(item => { container.innerHTML += createSquareCard(item); });
+      }
+    }
+
+    function createSquareCard(item) {
+      return `
+        <div class="square-card">
+          <div>
+            <span class="badge">${item.type}</span>
+            <h4 style="font-size: 0.95rem; font-weight: bold; color: var(--primary-blue); margin-top: 4px;">${item.title}</h4>
+            <p style="font-size: 0.75rem; color: #5c6b73; margin-top: 2px;">📍 ${item.city}</p>
+          </div>
+          <p style="font-size: 0.75rem; color: #666;">${item.desc}</p>
+          <div class="card-actions">
+            <button class="btn-view" onclick="alert('Détails : ${item.desc}')">Voir</button>
+            <button class="btn-apply" onclick="alert('Candidature envoyée pour ${item.title} !')">Postuler</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Enregistrement du CV et transformation de la page sur place
+    function saveCvAndSwitchToProfile(event) {
+      event.preventDefault();
+
+      const profile = {
+        name: document.getElementById('cvName').value,
+        city: document.getElementById('cvCity').value,
+        domain: document.getElementById('cvDomain').value
+      };
+
+      // 1. Transformer l'en-tête du haut pour afficher le profil type "jeu en ligne"
+      const headerTopRight = document.getElementById('headerTopRight');
+      headerTopRight.innerHTML = `
+        <div class="profile-header" style="margin:0; padding:6px 12px;">
+          <div class="profile-left">
+            <div class="profile-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+            <div class="profile-info">
+              <h3>${profile.name}</h3>
+              <p>${profile.domain} • ${profile.city}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // 2. Retirer l'onglet "Créer CV" et le menu initial pour laisser place aux listes
+      const mainNavbar = document.getElementById('mainNavbar');
+      mainNavbar.innerHTML = `
+        <button class="nav-link active" onclick="switchTab('stages')">🎓 Stages</button>
+        <button class="nav-link" onclick="switchTab('emplois')">💼 Emplois</button>
+      `;
+
+      // 3. Basculer directement sur l'affichage des offres de stages
+      document.querySelectorAll('.view-page').forEach(view => view.classList.remove('active-view'));
+      document.getElementById('view-profil-offres').classList.add('active-view');
+      switchOfferCategory('stages');
+    }
+  </script>
+</body>
+</html>
